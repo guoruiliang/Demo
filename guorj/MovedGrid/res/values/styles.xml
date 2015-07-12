@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+    </style>
+
+
+
+    
+    
+    <!-- popupwindow弹框动画效果 -->
+     <style name="AnimationForCate">
+        <item name="android:windowEnterAnimation">@anim/cate_show</item>
+        <item name="android:windowExitAnimation">@anim/cate_close</item>
+    </style>
+    
+</resources>
