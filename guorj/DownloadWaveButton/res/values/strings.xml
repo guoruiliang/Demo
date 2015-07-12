@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+
+    <!-- 自定义安装按钮文字 -->
+    <string name="downloadbtn_download">下载</string>
+    <string name="downloadbtn_open">启动</string>
+    <string name="downloadbtn_update">更新</string>
+    <string name="downloadbtn_pause">暂停</string>
+    <string name="downloadbtn_cancel">删除</string>
+    <string name="downloadbtn_downloading">下载中</string>
+    <string name="downloadbtn_waiting">等待中</string>
+    <string name="downloadbtn_install">安装</string>
+    <string name="downloadbtn_check">查看详情</string>
+    <string name="downloadbtn_uninstall">卸载</string>
+</resources>
