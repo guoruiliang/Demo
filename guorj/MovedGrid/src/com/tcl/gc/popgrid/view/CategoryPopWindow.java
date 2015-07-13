@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -302,9 +303,12 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 
 	/** 退出时候保存选择后数据库的设置 */
 	private void saveChannel() {
+		long a=System.currentTimeMillis();
 		CategoryManage.getManage().deleteAllChannel();
 		CategoryManage.getManage().saveUserChannel(userAdapter.getChannnelLst());
 		CategoryManage.getManage().saveOtherChannel(otherAdapter.getChannnelLst());
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "saveChannel time:"+b);
 	}
 
 	/**

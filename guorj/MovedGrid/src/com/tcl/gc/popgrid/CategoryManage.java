@@ -14,6 +14,7 @@ import com.db4o.query.Query;
 import com.tcl.gc.popgrid.dao.CategoryItem;
 
 public class CategoryManage {
+	private static final String LOG_TAG=CategoryManage.class.getSimpleName();
 	private EmbeddedObjectContainer db;
 
 	public static CategoryManage categoryManage;
@@ -25,8 +26,6 @@ public class CategoryManage {
 	 * 默认的其他分类列表
 	 * */
 	public static List<CategoryItem> defaultOtherCategorys;
-	/** 判断数据库中是否存在用户数据 */
-	private boolean userExist = false;
 
 	/**
 	 * 这里写上默认的数据，比如开始没有网络的情况下，给的一些默认分类
@@ -53,7 +52,7 @@ public class CategoryManage {
 		defaultOtherCategorys.add(new CategoryItem(16, "美女", 9, 0));
 		defaultOtherCategorys.add(new CategoryItem(17, "游戏", 10, 0));
 		defaultOtherCategorys.add(new CategoryItem(18, "数码", 11, 0));
-
+		
 	}
 
 	/**
@@ -65,13 +64,16 @@ public class CategoryManage {
 	 * @param otherCates
 	 */
 	public static void initData(List<CategoryItem> userCates, List<CategoryItem> otherCates) {
-
+		
 	}
 
 	private CategoryManage() throws SQLException {
 		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), Environment.getExternalStorageDirectory() + "/"
 				+ "db4oTOp.data");
-		// NavigateItemDao(paramDBHelper.getDao(NavigateItem.class));
+		//判断是否有数据，如果没有数据则初始化，如果已经有数据了，就不初始化
+		if(db.queryByExample(CategoryItem.class).size()==0){
+			initDefaultChannel();
+		}
 		return;
 	}
 
@@ -91,12 +93,16 @@ public class CategoryManage {
 	 * 清除所有的分类
 	 */
 	public void deleteAllChannel() {
+		long a=System.currentTimeMillis();
 		ObjectSet<CategoryItem> result = db.queryByExample(new CategoryItem());
+		
 		while (result.hasNext()) {
 			CategoryItem categoryItem = result.next();
 			db.delete(categoryItem);
-			db.commit();
 		}
+		db.commit();
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "deleteAllChannel time:"+b);
 
 	}
 
@@ -106,22 +112,22 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的用户选择分类 : 默认用户选择分类 ;
 	 */
 	public List<CategoryItem> getUserChannel() {
-
+		long a=System.currentTimeMillis();
+		
+		List<CategoryItem> list = new ArrayList<CategoryItem>();
 		Query query = db.query();
-		query.constrain(new CategoryItem());
-		query.descend("selected").constrain("1");
+		query.constrain(CategoryItem.class);
+		query.descend("selected").constrain(1);
 		ObjectSet<CategoryItem> result = query.execute();
 		if (result.size() > 0) {
-			userExist = true;
-			List<CategoryItem> list = new ArrayList<CategoryItem>();
 			while (result.hasNext()) {
 				list.add(result.next());
 			}
-			return list;
+			
 		}
-
-		initDefaultChannel();
-		return defaultUserCategorys;
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "getUserChannel time:"+b);
+		return list;
 	}
 
 	/**
@@ -130,24 +136,24 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的其它分类 : 默认其它分类 ;
 	 */
 	public List<CategoryItem> getOtherChannel() {
-
+		long a=System.currentTimeMillis();
+		ArrayList<CategoryItem> list = new ArrayList<CategoryItem>();
 		Query query = db.query();
-		query.constrain(new CategoryItem());
-		query.descend("selected").constrain("0");
+		query.constrain(CategoryItem.class);
+		query.descend("selected").constrain(0);
 		ObjectSet<CategoryItem> result = query.execute();
-		List<CategoryItem> list = null;
+	
 		if (result.size() > 0) {
 			list = new ArrayList<CategoryItem>();
 			while (result.hasNext()) {
 				list.add(result.next());
 			}
-			return list;
+			
 		}
-
-		if (userExist) {
-			return list;
-		}
-		return (List<CategoryItem>) defaultOtherCategorys;
+		
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "getOtherChannel time:"+b);
+		return list;
 	}
 
 	/**
@@ -156,11 +162,14 @@ public class CategoryManage {
 	 * @param userList
 	 */
 	public void saveUserChannel(List<CategoryItem> userList) {
+		long a=System.currentTimeMillis();
+		
 		for (CategoryItem channelItem : userList) {
 			db.store(channelItem);
-			db.commit();
 		}
-
+		db.commit();
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "saveUserChannel time:"+b);
 	}
 
 	/**
@@ -169,20 +178,27 @@ public class CategoryManage {
 	 * @param otherList
 	 */
 	public void saveOtherChannel(List<CategoryItem> otherList) {
+		long a=System.currentTimeMillis();
 		for (CategoryItem channelItem : otherList) {
 			db.store(channelItem);
-			db.commit();
+		
 		}
-
+		db.commit();
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "saveOtherChannel time:"+b);
 	}
 
+	
 	/**
 	 * 初始化数据库内的分类数据
 	 */
 	private void initDefaultChannel() {
-		Log.d("deleteAll", "deleteAll");
+		Log.d(LOG_TAG, "deleteAll");
+		long a=System.currentTimeMillis();
 		deleteAllChannel();
 		saveUserChannel(defaultUserCategorys);
 		saveOtherChannel(defaultOtherCategorys);
+		long b=System.currentTimeMillis()-a;
+		Log.e("yy", "initDefaultChannel time:"+b);
 	}
 }

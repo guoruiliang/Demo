@@ -94,7 +94,7 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 
 	private void initData() {
 		userCategoryist = ((ArrayList<CategoryItem>) CategoryManage.getManage().getUserChannel());
-
+		Log.d("yy", "initData: " + userCategoryist.size());
 		int pageCount = (userCategoryist.size() + GRIDVIEW_COUNT - 1) / GRIDVIEW_COUNT;
 		Log.d(TAG, "pageCount: " + pageCount);
 		mGridViewAdapters.clear();
