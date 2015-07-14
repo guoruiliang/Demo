@@ -1,6 +1,7 @@
 package com.tcl.gc.popgrid;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.database.SQLException;
@@ -12,6 +13,7 @@ import com.db4o.EmbeddedObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.query.Query;
 import com.tcl.gc.popgrid.dao.CategoryItem;
+import com.tcl.gc.popgrid.util.Db4oUtil;
 
 public class CategoryManage {
 	private static final String LOG_TAG=CategoryManage.class.getSimpleName();
@@ -68,10 +70,8 @@ public class CategoryManage {
 	}
 
 	private CategoryManage() throws SQLException {
-		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), Environment.getExternalStorageDirectory() + "/"
-				+ "db4oTOp.data");
 		//判断是否有数据，如果没有数据则初始化，如果已经有数据了，就不初始化
-		if(db.queryByExample(CategoryItem.class).size()==0){
+		if(Db4oUtil.count(CategoryItem.class)<=0){
 			initDefaultChannel();
 		}
 		return;
@@ -94,13 +94,7 @@ public class CategoryManage {
 	 */
 	public void deleteAllChannel() {
 		long a=System.currentTimeMillis();
-		ObjectSet<CategoryItem> result = db.queryByExample(new CategoryItem());
-		
-		while (result.hasNext()) {
-			CategoryItem categoryItem = result.next();
-			db.delete(categoryItem);
-		}
-		db.commit();
+		Db4oUtil.delAll(CategoryItem.class);
 		long b=System.currentTimeMillis()-a;
 		Log.e("yy", "deleteAllChannel time:"+b);
 
@@ -112,19 +106,12 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的用户选择分类 : 默认用户选择分类 ;
 	 */
 	public List<CategoryItem> getUserChannel() {
-		long a=System.currentTimeMillis();
 		
-		List<CategoryItem> list = new ArrayList<CategoryItem>();
-		Query query = db.query();
-		query.constrain(CategoryItem.class);
-		query.descend("selected").constrain(1);
-		ObjectSet<CategoryItem> result = query.execute();
-		if (result.size() > 0) {
-			while (result.hasNext()) {
-				list.add(result.next());
-			}
-			
-		}
+		long a=System.currentTimeMillis();
+		List<CategoryItem> list=null ;
+		HashMap map=new HashMap();
+		map.put("selected", 1);
+		list= Db4oUtil.getDatasByParam(CategoryItem.class,map);
 		long b=System.currentTimeMillis()-a;
 		Log.e("yy", "getUserChannel time:"+b);
 		return list;
@@ -137,20 +124,10 @@ public class CategoryManage {
 	 */
 	public List<CategoryItem> getOtherChannel() {
 		long a=System.currentTimeMillis();
-		ArrayList<CategoryItem> list = new ArrayList<CategoryItem>();
-		Query query = db.query();
-		query.constrain(CategoryItem.class);
-		query.descend("selected").constrain(0);
-		ObjectSet<CategoryItem> result = query.execute();
-	
-		if (result.size() > 0) {
-			list = new ArrayList<CategoryItem>();
-			while (result.hasNext()) {
-				list.add(result.next());
-			}
-			
-		}
-		
+		List<CategoryItem> list=null ;
+		HashMap map=new HashMap();
+		map.put("selected", 0);
+		list= Db4oUtil.getDatasByParam(CategoryItem.class,map);
 		long b=System.currentTimeMillis()-a;
 		Log.e("yy", "getOtherChannel time:"+b);
 		return list;
@@ -164,10 +141,7 @@ public class CategoryManage {
 	public void saveUserChannel(List<CategoryItem> userList) {
 		long a=System.currentTimeMillis();
 		
-		for (CategoryItem channelItem : userList) {
-			db.store(channelItem);
-		}
-		db.commit();
+		Db4oUtil.save(userList);
 		long b=System.currentTimeMillis()-a;
 		Log.e("yy", "saveUserChannel time:"+b);
 	}
@@ -179,11 +153,7 @@ public class CategoryManage {
 	 */
 	public void saveOtherChannel(List<CategoryItem> otherList) {
 		long a=System.currentTimeMillis();
-		for (CategoryItem channelItem : otherList) {
-			db.store(channelItem);
-		
-		}
-		db.commit();
+		Db4oUtil.save(otherList);
 		long b=System.currentTimeMillis()-a;
 		Log.e("yy", "saveOtherChannel time:"+b);
 	}
