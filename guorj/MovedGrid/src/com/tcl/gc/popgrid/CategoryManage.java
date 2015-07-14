@@ -178,6 +178,13 @@ public class CategoryManage {
 		}
 	}
 
+	
+	public void closeDb(){
+		if(mDb4oHelper!=null){
+			mDb4oHelper.close();
+		}
+		
+	}
 	/**
 	 * 初始化数据库内的分类数据
 	 */
