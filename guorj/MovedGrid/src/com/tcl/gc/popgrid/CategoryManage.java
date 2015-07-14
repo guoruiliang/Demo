@@ -16,7 +16,7 @@ import com.tcl.gc.popgrid.dao.CategoryItem;
 import com.tcl.gc.popgrid.util.Db4oUtil;
 
 public class CategoryManage {
-	private static final String LOG_TAG=CategoryManage.class.getSimpleName();
+	private static final String LOG_TAG = CategoryManage.class.getSimpleName();
 	private EmbeddedObjectContainer db;
 
 	public static CategoryManage categoryManage;
@@ -54,7 +54,7 @@ public class CategoryManage {
 		defaultOtherCategorys.add(new CategoryItem(16, "美女", 9, 0));
 		defaultOtherCategorys.add(new CategoryItem(17, "游戏", 10, 0));
 		defaultOtherCategorys.add(new CategoryItem(18, "数码", 11, 0));
-		
+
 	}
 
 	/**
@@ -65,13 +65,14 @@ public class CategoryManage {
 	 * @param userCates
 	 * @param otherCates
 	 */
-	public static void initData(List<CategoryItem> userCates, List<CategoryItem> otherCates) {
-		
+	public static void initData(List<CategoryItem> userCates,
+			List<CategoryItem> otherCates) {
+
 	}
 
 	private CategoryManage() throws SQLException {
-		//判断是否有数据，如果没有数据则初始化，如果已经有数据了，就不初始化
-		if(Db4oUtil.count(CategoryItem.class)<=0){
+		// 判断是否有数据，如果没有数据则初始化，如果已经有数据了，就不初始化
+		if (Db4oUtil.count(CategoryItem.class) <= 0) {
 			initDefaultChannel();
 		}
 		return;
@@ -93,11 +94,7 @@ public class CategoryManage {
 	 * 清除所有的分类
 	 */
 	public void deleteAllChannel() {
-		long a=System.currentTimeMillis();
 		Db4oUtil.delAll(CategoryItem.class);
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "deleteAllChannel time:"+b);
-
 	}
 
 	/**
@@ -106,15 +103,10 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的用户选择分类 : 默认用户选择分类 ;
 	 */
 	public List<CategoryItem> getUserChannel() {
-		
-		long a=System.currentTimeMillis();
-		List<CategoryItem> list=null ;
-		HashMap map=new HashMap();
+
+		HashMap map = new HashMap();
 		map.put("selected", 1);
-		list= Db4oUtil.getDatasByParam(CategoryItem.class,map);
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "getUserChannel time:"+b);
-		return list;
+		return  Db4oUtil.getDatasByParam(CategoryItem.class, map);
 	}
 
 	/**
@@ -123,14 +115,10 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的其它分类 : 默认其它分类 ;
 	 */
 	public List<CategoryItem> getOtherChannel() {
-		long a=System.currentTimeMillis();
-		List<CategoryItem> list=null ;
-		HashMap map=new HashMap();
+		HashMap map = new HashMap();
 		map.put("selected", 0);
-		list= Db4oUtil.getDatasByParam(CategoryItem.class,map);
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "getOtherChannel time:"+b);
-		return list;
+		return Db4oUtil.getDatasByParam(CategoryItem.class, map);
+		
 	}
 
 	/**
@@ -139,11 +127,14 @@ public class CategoryManage {
 	 * @param userList
 	 */
 	public void saveUserChannel(List<CategoryItem> userList) {
-		long a=System.currentTimeMillis();
-		
-		Db4oUtil.save(userList);
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "saveUserChannel time:"+b);
+		// 需要修改slected值
+		if (userList != null && !userList.isEmpty()) {
+			for (CategoryItem item : userList) {
+				item.selected = 1;
+				Db4oUtil.getDb().store(item);
+			}
+			Db4oUtil.getDb().commit();
+		}
 	}
 
 	/**
@@ -152,23 +143,22 @@ public class CategoryManage {
 	 * @param otherList
 	 */
 	public void saveOtherChannel(List<CategoryItem> otherList) {
-		long a=System.currentTimeMillis();
-		Db4oUtil.save(otherList);
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "saveOtherChannel time:"+b);
+		// 需要修改slected值
+		if (otherList != null && !otherList.isEmpty()) {
+			for (CategoryItem item : otherList) {
+				item.selected = 0;
+				Db4oUtil.getDb().store(item);
+			}
+			Db4oUtil.getDb().commit();
+		}
 	}
 
-	
 	/**
 	 * 初始化数据库内的分类数据
 	 */
 	private void initDefaultChannel() {
-		Log.d(LOG_TAG, "deleteAll");
-		long a=System.currentTimeMillis();
 		deleteAllChannel();
 		saveUserChannel(defaultUserCategorys);
 		saveOtherChannel(defaultOtherCategorys);
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "initDefaultChannel time:"+b);
 	}
 }

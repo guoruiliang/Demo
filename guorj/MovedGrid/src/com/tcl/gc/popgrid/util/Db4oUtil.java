@@ -14,6 +14,7 @@ import com.db4o.query.Query;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 public class Db4oUtil {
 
@@ -33,7 +34,7 @@ public class Db4oUtil {
 		config.common().objectClass(Kv.class).objectField("k").indexed(true);
 		if (db == null || db.ext().isClosed()) {
 //			db = Db4oEmbedded.openFile(config, ctx.getFilesDir() + "/db.o");
-			Db4oEmbedded.openFile(config, Environment.getExternalStorageDirectory() + "/"
+			db=Db4oEmbedded.openFile(config, Environment.getExternalStorageDirectory() + "/"
 					+ DB_NAME);
 		}
 	}
@@ -95,7 +96,7 @@ public class Db4oUtil {
 		
 		Query q = getQuery(clazz);
 		for (String k : param.keySet()) {
-			q.descend(k).equals(param.get(k));
+			q.descend(k).constrain(param.get(k));
 		}
 		
 		ObjectSet<T> tmp = q.execute();
@@ -113,7 +114,7 @@ public class Db4oUtil {
 	public static <T> void delByParam(Class<T> clazz, HashMap<String, Object> param) {
 		Query q = getQuery(clazz);
 		for (String k : param.keySet()) {
-			q.descend(k).equals(param.get(k));
+			q.descend(k).constrain(param.get(k));
 		}
 		ObjectSet<T> tmp = q.execute();
 		if (!tmp.isEmpty()) {
@@ -170,7 +171,7 @@ public class Db4oUtil {
 	public static Object get(String k) {
 		Object obj = null;
 		Query q = getQuery(Kv.class);
-		q.descend("k").equals(k);
+		q.descend("k").constrain(k);
 		ObjectSet<Kv> tmp = q.execute();
 		if (!tmp.isEmpty()) {
 			obj = tmp.get(0).v;
@@ -188,9 +189,10 @@ public class Db4oUtil {
 
 
 	public static ObjectContainer getDb() {
-		while (db == null) {
+		if (db == null) {
 			try {
 				Thread.sleep(10);
+				init(ctx); 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

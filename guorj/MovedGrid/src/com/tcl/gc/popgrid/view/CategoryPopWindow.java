@@ -1,19 +1,23 @@
 package com.tcl.gc.popgrid.view;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.db4o.Db4o;
 import com.tcl.gc.popgrid.AppApplication;
 import com.tcl.gc.popgrid.CategoryManage;
 import com.tcl.gc.popgrid.R;
 import com.tcl.gc.popgrid.adapter.DragAdapter;
 import com.tcl.gc.popgrid.adapter.OtherAdapter;
 import com.tcl.gc.popgrid.dao.CategoryItem;
+import com.tcl.gc.popgrid.util.Db4oUtil;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,8 +128,14 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 
 	/** 初始化数据 */
 	private void initData() {
+		long a=SystemClock.currentThreadTimeMillis();
+	
 		userChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage().getUserChannel());
 		otherChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage().getOtherChannel());
+		
+		long b=SystemClock.currentThreadTimeMillis();
+		Log.e("zz", "get userChannelList and otherChannelList Time :"+String.valueOf(b-a));
+		
 		userAdapter = new DragAdapter(mContext, userChannelList);
 		userGridView.setAdapter(userAdapter);
 		otherAdapter = new OtherAdapter(mContext, otherChannelList);
@@ -303,12 +313,13 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 
 	/** 退出时候保存选择后数据库的设置 */
 	private void saveChannel() {
-		long a=System.currentTimeMillis();
+		long a=SystemClock.currentThreadTimeMillis();
 		CategoryManage.getManage().deleteAllChannel();
-		CategoryManage.getManage().saveUserChannel(userAdapter.getChannnelLst());
 		CategoryManage.getManage().saveOtherChannel(otherAdapter.getChannnelLst());
-		long b=System.currentTimeMillis()-a;
-		Log.e("yy", "saveChannel time:"+b);
+		CategoryManage.getManage().saveUserChannel(userAdapter.getChannnelLst());
+		
+		long b=SystemClock.currentThreadTimeMillis();
+		Log.e("zz", "save chanel time:"+String.valueOf(b-a));
 	}
 
 	/**
