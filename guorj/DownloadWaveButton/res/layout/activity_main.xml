@@ -22,7 +22,7 @@
                 customprgress:image_height="100dp"
                  customprgress:image_width="100dp"
                  android:textColor="#00ff00"
-                 android:textSize="14dp"
+                 android:textSize="18dp"
                 />
 
             <Button
