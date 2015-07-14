@@ -2,15 +2,19 @@ package com.tcl.gc.popgrid.adapter;
 
 import java.util.List;
 
-import com.tcl.gc.popgrid.R;
-import com.tcl.gc.popgrid.dao.CategoryItem;
-
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.tcl.gc.popgrid.R;
+import com.tcl.gc.popgrid.dao.CategoryItem;
 
 /**
  * 实际显示在界面上的adapter

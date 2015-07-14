@@ -17,6 +17,6 @@
     android:paddingTop="5dp"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
-    android:scrollbarStyle="outsideOverlay"
+    android:scrollbarStyle="insideInset"
     android:stretchMode="columnWidth"
     android:verticalSpacing="0dp" />
