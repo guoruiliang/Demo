@@ -13,7 +13,6 @@ import com.tcl.gc.popgrid.util.Db4oHelper;
 public class CategoryManage {
 	private static final String LOG_TAG = CategoryManage.class.getSimpleName();
 	Context mContext;
-	Db4oHelper mDb4oHelper = null;
 	public static CategoryManage categoryManage;
 	/**
 	 * 默认的用户选择分类列表
@@ -67,9 +66,8 @@ public class CategoryManage {
 
 	private CategoryManage(Context context) throws SQLException {
 		this.mContext = context;
-		mDb4oHelper = new Db4oHelper(context);
 		// 判断是否有数据，如果没有数据则初始化，如果已经有数据了，就不初始化
-		if (mDb4oHelper.count(CategoryItem.class) <= 0) {
+		if (AppApplication.mDb4oHelper.count(CategoryItem.class) <= 0) {
 			initDefaultChannel();
 		}
 		return;
@@ -92,10 +90,10 @@ public class CategoryManage {
 	 */
 	public void deleteAllChannel() {
 		try {
-			mDb4oHelper.delAll(CategoryItem.class);
+			AppApplication.mDb4oHelper.delAll(CategoryItem.class);
 		} catch (Exception e) {
 		} finally {
-			mDb4oHelper.close();
+//			AppApplication.mDb4oHelper.close();
 		}
 	}
 
@@ -109,10 +107,10 @@ public class CategoryManage {
 		try {
 			HashMap map = new HashMap();
 			map.put("selected", 1);
-			result = mDb4oHelper.getDatasByParam(CategoryItem.class, map);
+			result = AppApplication.mDb4oHelper.getDatasByParam(CategoryItem.class, map);
 		} catch (Exception e) {
 		} finally {
-			mDb4oHelper.close();
+//			AppApplication.mDb4oHelper.close();
 		}
 		return result;
 
@@ -128,10 +126,10 @@ public class CategoryManage {
 		try {
 			HashMap map = new HashMap();
 			map.put("selected", 0);
-			result = mDb4oHelper.getDatasByParam(CategoryItem.class, map);
+			result = AppApplication.mDb4oHelper.getDatasByParam(CategoryItem.class, map);
 		} catch (Exception e) {
 		} finally {
-			mDb4oHelper.close();
+//			AppApplication.mDb4oHelper.close();
 		}
 		return result;
 
@@ -149,11 +147,11 @@ public class CategoryManage {
 				for (CategoryItem item : userList) {
 					item.selected = 1;
 				}
-				mDb4oHelper.save(userList);
+				AppApplication.mDb4oHelper.save(userList);
 			}
 		} catch (Exception e) {
 		} finally {
-			mDb4oHelper.close();
+//			AppApplication.mDb4oHelper.close();
 		}
 
 	}
@@ -170,21 +168,15 @@ public class CategoryManage {
 				for (CategoryItem item : otherList) {
 					item.selected = 0;
 				}
-				mDb4oHelper.save(otherList);
+				AppApplication.mDb4oHelper.save(otherList);
 			}
 		} catch (Exception e) {
 		} finally {
-			mDb4oHelper.close();
+//			AppApplication.mDb4oHelper.close();
 		}
 	}
 
 	
-	public void closeDb(){
-		if(mDb4oHelper!=null){
-			mDb4oHelper.close();
-		}
-		
-	}
 	/**
 	 * 初始化数据库内的分类数据
 	 */
