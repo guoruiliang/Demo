@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <!-- 自定义波浪进度下载控件属性 -->
+    <declare-styleable name="CustomProgressBar">
+
+        <!-- 图像背景 -->
+        <attr name="image_height" format="dimension" />
+        <attr name="image_width" format="dimension" />
+        <!-- 采用android已经定义好了类型 -->
+         <attr name="android:textSize" />
+        <attr name="android:textColor" />
+        
+    </declare-styleable>
+    
+
+</resources>

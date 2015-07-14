@@ -21,7 +21,6 @@ import android.widget.ImageView;
  *
  */
 public class DownloadWaveView extends FrameLayout {
-	private int mBackgroundImageSize = 44;// 背景图的尺寸dp
 
 	ImageView mBackgroundImage;
 	private float mPercent;
@@ -42,12 +41,6 @@ public class DownloadWaveView extends FrameLayout {
 
 	public DownloadWaveView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		// 添加背景图
-		int bgPxSize = DensityUtil.dip2px(context, mBackgroundImageSize);
-		FrameLayout.LayoutParams imageParmas = new FrameLayout.LayoutParams(bgPxSize, bgPxSize);
-		mBackgroundImage = new ImageView(context);
-		addView(mBackgroundImage, imageParmas);
 
 	}
 	/**设置百分比*/
@@ -104,7 +97,7 @@ public class DownloadWaveView extends FrameLayout {
 		canvas.save();
 		path.reset();
 		canvas.clipPath(path);
-		path.addCircle(width / 2, height / 2, width / 2, Direction.CCW);
+		path.addCircle(width / 2, height / 2, width / 2-15, Direction.CCW);//比外面的view半径小15
 		canvas.clipPath(path, Op.REPLACE);
 
 		if (mFlag == Status.RUNNING) {
@@ -130,7 +123,7 @@ public class DownloadWaveView extends FrameLayout {
 			// mPaint.setColor(Color.rgb(33, 211, 39));
 			// canvas.drawCircle(width / 2, height / 2, width / 2 - 2, mPaint);
 
-			postInvalidateDelayed(20);
+			postInvalidateDelayed(100);
 		} else if(mFlag == Status.PAUSE){
 
 			if (mScaledBitmapStop == null) {

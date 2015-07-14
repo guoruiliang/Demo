@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:customprgress="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff"
@@ -16,8 +17,13 @@
 
             <com.tcl.gc.download.view.CustomProgressWithStatus
                 android:id="@+id/customProgress"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                customprgress:image_height="100dp"
+                 customprgress:image_width="100dp"
+                 android:textColor="#00ff00"
+                 android:textSize="14dp"
+                />
 
             <Button
                 android:id="@+id/download"
