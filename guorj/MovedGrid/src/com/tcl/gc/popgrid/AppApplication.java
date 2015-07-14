@@ -1,7 +1,7 @@
 package com.tcl.gc.popgrid;
 
 
-import com.tcl.gc.popgrid.util.Db4oUtil;
+import com.tcl.gc.popgrid.util.Db4oHelper;
 
 import android.app.Application;
 
@@ -13,7 +13,6 @@ public class AppApplication extends Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		mAppApplication = this;
-		Db4oUtil.init(getApplicationContext());
 	}
 
 	/** 获取Application */
@@ -27,6 +26,5 @@ public class AppApplication extends Application {
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
-		Db4oUtil.close();
 	}
 }

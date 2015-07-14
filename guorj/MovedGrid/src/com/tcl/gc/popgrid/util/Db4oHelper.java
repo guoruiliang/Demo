@@ -1,83 +1,111 @@
 package com.tcl.gc.popgrid.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
-import com.db4o.config.EmbeddedConfiguration;
-import com.db4o.query.Query;
-
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-public class Db4oUtil {
+import com.db4o.Db4o;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.config.Configuration;
+import com.db4o.query.Query;
+
+public class Db4oHelper {
 
 	private static Context ctx;
 
-	private static ObjectContainer db;
+	private static ObjectContainer oc;
 
 	public static final String DB_NAME="db4oTOp.data";
 	
-	
 	private static ExecutorService execService = Executors
 			.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+
+	public Db4oHelper(Context context) {
+		this.ctx=context;
+	}
+
 	
-	public synchronized static void init(Context context) {
-		ctx = context;
-		EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
-		config.common().objectClass(Kv.class).objectField("k").indexed(true);
-		if (db == null || db.ext().isClosed()) {
-//			db = Db4oEmbedded.openFile(config, ctx.getFilesDir() + "/db.o");
-			db=Db4oEmbedded.openFile(config, Environment.getExternalStorageDirectory() + "/"
-					+ DB_NAME);
-		}
+	private Configuration dbConfig() {
+		Configuration c = Db4o.newConfiguration();
+		// Index entries by Id
+		c.objectClass(Kv.class).objectField("k").indexed(true);
+		// Configure proper activation + update depth
+		// TODO
+		return c;
 	}
 	
+	
+	private  ObjectContainer db() {
+		try {
+			if (oc == null || oc.ext().isClosed()) {
+				oc = Db4o.openFile(dbConfig(), db4oDBFullPath(ctx));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			Log.e(Db4oHelper.class.getName(), e.toString());
+		}
+		return oc;
+	}
+	
+	private String db4oDBFullPath(Context ctx) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+		return Environment.getExternalStorageDirectory() + "/" + DB_NAME;
+        }
+        else{
+        	return ctx.getDir("data", 0) + "/" + DB_NAME;
+        }
+	}
 
-	public static <T> void save(T... ts) {
+	
+	
+	
+
+	public  <T> void save(T... ts) {
 		if (ts != null && ts.length > 0) {
 			for (T t : ts) {
-				getDb().store(t);
+				db().store(t);
 			}
 			commit();
 		}
 	}
 
-	public static <T> void save(List<T> list) {
+	public  <T> void save(List<T> list) {
 		if (list != null && !list.isEmpty()) {
 			for (T t : list) {
-				getDb().store(t);
+				db().store(t);
 			}
 			commit();
 		}
 	}
 
-	public static <T> void del(T t) {
+	public  <T> void del(T t) {
 		if (t != null) {
-			getDb().delete(t);
+			db().delete(t);
 			commit();
 		}
 	}
 
-	public static <T> void delAll(Class<T> clazz) {
-		Query q = getDb().query();
+	public  <T> void delAll(Class<T> clazz) {
+		Query q = db().query();
 		q.constrain(clazz);
 		ObjectSet<T> tmp = q.execute();
 		if (!tmp.isEmpty()) {
 			for (T u : tmp) {
-				getDb().delete(u);
+				db().delete(u);
 			}
-			getDb().commit();
+			db().commit();
 		}
 	}
 	
-	public static <T> List<T> getAll(Class<T> clazz) {
+	public  <T> List<T> getAll(Class<T> clazz) {
 		List<T> result=new ArrayList<T>();
 		
 		Query q = getQuery(clazz);
@@ -91,7 +119,7 @@ public class Db4oUtil {
 	}
 	
 	
-	public static <T> List<T> getDatasByParam(Class<T> clazz,HashMap<String, Object> param) {
+	public  <T> List<T> getDatasByParam(Class<T> clazz,HashMap<String, Object> param) {
 		List<T> result=new ArrayList<T>();
 		
 		Query q = getQuery(clazz);
@@ -111,7 +139,7 @@ public class Db4oUtil {
 	
 	
 
-	public static <T> void delByParam(Class<T> clazz, HashMap<String, Object> param) {
+	public  <T> void delByParam(Class<T> clazz, HashMap<String, Object> param) {
 		Query q = getQuery(clazz);
 		for (String k : param.keySet()) {
 			q.descend(k).constrain(param.get(k));
@@ -119,19 +147,19 @@ public class Db4oUtil {
 		ObjectSet<T> tmp = q.execute();
 		if (!tmp.isEmpty()) {
 			for (T t : tmp) {
-				getDb().delete(t);
+				db().delete(t);
 			}
-			getDb().commit();
+			db().commit();
 		}
 	}
 
-	public static <T> Query getQuery(Class<T> clazz) {
-		Query q = getDb().query();
+	public  <T> Query getQuery(Class<T> clazz) {
+		Query q = db().query();
 		q.constrain(clazz);
 		return q;
 	}
 
-	public static void put(String k, Object v) {
+	public  void put(String k, Object v) {
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("k", k);
 		delByParam(Kv.class, param);
@@ -143,7 +171,7 @@ public class Db4oUtil {
 		}
 	}
 
-	public static void putAsync(final String k, final Object v,
+	public  void putAsync(final String k, final Object v,
 			final Callback... cbs) {
 		execService.execute(new Runnable() {
 			public void run() {
@@ -157,7 +185,7 @@ public class Db4oUtil {
 		});
 	}
 
-	public static void getAsync(final String k, final Callback cb) {
+	public  void getAsync(final String k, final Callback cb) {
 		execService.execute(new Runnable() {
 			public void run() {
 				Object obj = get(k);
@@ -168,7 +196,7 @@ public class Db4oUtil {
 		});
 	}
 
-	public static Object get(String k) {
+	public  Object get(String k) {
 		Object obj = null;
 		Query q = getQuery(Kv.class);
 		q.descend("k").constrain(k);
@@ -179,34 +207,40 @@ public class Db4oUtil {
 		return obj;
 	}
 
-	public static <T> int count(Class<T> clazz) {
-		Query q = getDb().query();
+	public  <T> int count(Class<T> clazz) {
+		Query q = db().query();
 		q.constrain(clazz);
 		ObjectSet<T> tmp = q.execute();
 		return tmp.size();
 	}
 
+	
 
-
-	public static ObjectContainer getDb() {
-		if (db == null) {
-			try {
-				Thread.sleep(10);
-				init(ctx); 
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+	public  void close() {
+		if (oc != null) {
+			oc.close();
+			oc = null;
 		}
-		return db;
 	}
 
-	public static void close() {
-		getDb().close();
+	public  void commit() {
+		db().commit();
+	}
+	
+	public void rollback() {
+		db().rollback();
 	}
 
-	public static void commit() {
-		getDb().commit();
+	public void deleteDatabase() {
+		close();
+		new File(db4oDBFullPath(ctx)).delete();
 	}
+
+	public void backup(String path) {
+		db().ext().backup(path);
+	}
+	
+	
 
 	private static class Kv {
 
@@ -217,5 +251,8 @@ public class Db4oUtil {
 	public static interface Callback {
 		public void done(Object obj);
 	}
+	
+	
+	
 
 }

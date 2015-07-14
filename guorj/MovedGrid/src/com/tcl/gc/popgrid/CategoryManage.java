@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.Context;
 import android.database.SQLException;
-import android.os.Environment;
-import android.util.Log;
 
-import com.db4o.Db4oEmbedded;
-import com.db4o.EmbeddedObjectContainer;
-import com.db4o.ObjectSet;
-import com.db4o.query.Query;
 import com.tcl.gc.popgrid.dao.CategoryItem;
-import com.tcl.gc.popgrid.util.Db4oUtil;
+import com.tcl.gc.popgrid.util.Db4oHelper;
 
 public class CategoryManage {
 	private static final String LOG_TAG = CategoryManage.class.getSimpleName();
-	private EmbeddedObjectContainer db;
-
+	Context mContext;
+	Db4oHelper mDb4oHelper = null;
 	public static CategoryManage categoryManage;
 	/**
 	 * 默认的用户选择分类列表
@@ -70,9 +65,11 @@ public class CategoryManage {
 
 	}
 
-	private CategoryManage() throws SQLException {
+	private CategoryManage(Context context) throws SQLException {
+		this.mContext = context;
+		mDb4oHelper = new Db4oHelper(context);
 		// 判断是否有数据，如果没有数据则初始化，如果已经有数据了，就不初始化
-		if (Db4oUtil.count(CategoryItem.class) <= 0) {
+		if (mDb4oHelper.count(CategoryItem.class) <= 0) {
 			initDefaultChannel();
 		}
 		return;
@@ -84,9 +81,9 @@ public class CategoryManage {
 	 * @param paramDBHelper
 	 * @throws SQLException
 	 */
-	public static CategoryManage getManage() throws SQLException {
+	public static CategoryManage getManage(Context context) throws SQLException {
 		if (categoryManage == null)
-			categoryManage = new CategoryManage();
+			categoryManage = new CategoryManage(context);
 		return categoryManage;
 	}
 
@@ -94,7 +91,12 @@ public class CategoryManage {
 	 * 清除所有的分类
 	 */
 	public void deleteAllChannel() {
-		Db4oUtil.delAll(CategoryItem.class);
+		try {
+			mDb4oHelper.delAll(CategoryItem.class);
+		} catch (Exception e) {
+		} finally {
+			mDb4oHelper.close();
+		}
 	}
 
 	/**
@@ -103,10 +105,17 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的用户选择分类 : 默认用户选择分类 ;
 	 */
 	public List<CategoryItem> getUserChannel() {
+		List<CategoryItem> result = new ArrayList<CategoryItem>();
+		try {
+			HashMap map = new HashMap();
+			map.put("selected", 1);
+			result = mDb4oHelper.getDatasByParam(CategoryItem.class, map);
+		} catch (Exception e) {
+		} finally {
+			mDb4oHelper.close();
+		}
+		return result;
 
-		HashMap map = new HashMap();
-		map.put("selected", 1);
-		return  Db4oUtil.getDatasByParam(CategoryItem.class, map);
 	}
 
 	/**
@@ -115,10 +124,17 @@ public class CategoryManage {
 	 * @return 数据库存在用户配置 ? 数据库内的其它分类 : 默认其它分类 ;
 	 */
 	public List<CategoryItem> getOtherChannel() {
-		HashMap map = new HashMap();
-		map.put("selected", 0);
-		return Db4oUtil.getDatasByParam(CategoryItem.class, map);
-		
+		List<CategoryItem> result = new ArrayList<CategoryItem>();
+		try {
+			HashMap map = new HashMap();
+			map.put("selected", 0);
+			result = mDb4oHelper.getDatasByParam(CategoryItem.class, map);
+		} catch (Exception e) {
+		} finally {
+			mDb4oHelper.close();
+		}
+		return result;
+
 	}
 
 	/**
@@ -127,14 +143,19 @@ public class CategoryManage {
 	 * @param userList
 	 */
 	public void saveUserChannel(List<CategoryItem> userList) {
-		// 需要修改slected值
-		if (userList != null && !userList.isEmpty()) {
-			for (CategoryItem item : userList) {
-				item.selected = 1;
-				Db4oUtil.getDb().store(item);
+		try {
+			// 需要修改slected值
+			if (userList != null && !userList.isEmpty()) {
+				for (CategoryItem item : userList) {
+					item.selected = 1;
+				}
+				mDb4oHelper.save(userList);
 			}
-			Db4oUtil.getDb().commit();
+		} catch (Exception e) {
+		} finally {
+			mDb4oHelper.close();
 		}
+
 	}
 
 	/**
@@ -143,13 +164,17 @@ public class CategoryManage {
 	 * @param otherList
 	 */
 	public void saveOtherChannel(List<CategoryItem> otherList) {
-		// 需要修改slected值
-		if (otherList != null && !otherList.isEmpty()) {
-			for (CategoryItem item : otherList) {
-				item.selected = 0;
-				Db4oUtil.getDb().store(item);
+		try {
+			// 需要修改slected值
+			if (otherList != null && !otherList.isEmpty()) {
+				for (CategoryItem item : otherList) {
+					item.selected = 0;
+				}
+				mDb4oHelper.save(otherList);
 			}
-			Db4oUtil.getDb().commit();
+		} catch (Exception e) {
+		} finally {
+			mDb4oHelper.close();
 		}
 	}
 

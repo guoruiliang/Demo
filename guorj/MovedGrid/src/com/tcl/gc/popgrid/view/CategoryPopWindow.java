@@ -1,16 +1,6 @@
 package com.tcl.gc.popgrid.view;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.db4o.Db4o;
-import com.tcl.gc.popgrid.AppApplication;
-import com.tcl.gc.popgrid.CategoryManage;
-import com.tcl.gc.popgrid.R;
-import com.tcl.gc.popgrid.adapter.DragAdapter;
-import com.tcl.gc.popgrid.adapter.OtherAdapter;
-import com.tcl.gc.popgrid.dao.CategoryItem;
-import com.tcl.gc.popgrid.util.Db4oUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,6 +26,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.tcl.gc.popgrid.CategoryManage;
+import com.tcl.gc.popgrid.R;
+import com.tcl.gc.popgrid.adapter.DragAdapter;
+import com.tcl.gc.popgrid.adapter.OtherAdapter;
+import com.tcl.gc.popgrid.dao.CategoryItem;
 
 public class CategoryPopWindow extends PopupWindow implements OnItemClickListener {
 	private Context mContext;
@@ -130,8 +126,8 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	private void initData() {
 		long a=SystemClock.currentThreadTimeMillis();
 	
-		userChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage().getUserChannel());
-		otherChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage().getOtherChannel());
+		userChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getUserChannel());
+		otherChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getOtherChannel());
 		
 		long b=SystemClock.currentThreadTimeMillis();
 		Log.e("zz", "get userChannelList and otherChannelList Time :"+String.valueOf(b-a));
@@ -314,9 +310,9 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	/** 退出时候保存选择后数据库的设置 */
 	private void saveChannel() {
 		long a=SystemClock.currentThreadTimeMillis();
-		CategoryManage.getManage().deleteAllChannel();
-		CategoryManage.getManage().saveOtherChannel(otherAdapter.getChannnelLst());
-		CategoryManage.getManage().saveUserChannel(userAdapter.getChannnelLst());
+		CategoryManage.getManage(mContext).deleteAllChannel();
+		CategoryManage.getManage(mContext).saveOtherChannel(otherAdapter.getChannnelLst());
+		CategoryManage.getManage(mContext).saveUserChannel(userAdapter.getChannnelLst());
 		
 		long b=SystemClock.currentThreadTimeMillis();
 		Log.e("zz", "save chanel time:"+String.valueOf(b-a));
