@@ -1,37 +1,30 @@
 package com.wesoft.movedgridwithdb4o;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
+import com.wesoft.movedgridwithdb4o.dao.CategoryItem;
+import com.wesoft.movedgridwithdb4o.view.CustomCategory;
+import com.wesoft.movedgridwithdb4o.view.CustomCategory.OnCateItemClickListener;
 public class MainActivity extends AppCompatActivity {
 
+    CustomCategory mCustomCategory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        mCustomCategory=(CustomCategory)findViewById(R.id.customCategory);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        mCustomCategory.setOnCateItemClickListener(new OnCateItemClickListener() {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+            @Override
+            public void onItemClick(CategoryItem cateGrovyItem) {
+                Toast.makeText(MainActivity.this, "CateItem: " +cateGrovyItem, Toast.LENGTH_SHORT).show();
 
-        return super.onOptionsItemSelected(item);
+            }
+        });
+
     }
 }
