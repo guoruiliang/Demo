@@ -208,8 +208,7 @@ public class Db4oHelper {
 	}
 
 	public  <T> int count(Class<T> clazz) {
-		Query q = db().query();
-		q.constrain(clazz);
+		Query q =getQuery(clazz);
 		ObjectSet<T> tmp = q.execute();
 		return tmp.size();
 	}
