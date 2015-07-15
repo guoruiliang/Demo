@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.wesoft.movedgridwithdb4o.dao.CategoryItem;
+import com.wesoft.movedgridwithdb4o.view.CategoryItem;
 import com.wesoft.movedgridwithdb4o.view.CustomCategory;
 import com.wesoft.movedgridwithdb4o.view.CustomCategory.OnCateItemClickListener;
 public class MainActivity extends AppCompatActivity {

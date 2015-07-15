@@ -25,11 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.wesoft.movedgridwithdb4o.CategoryManage;
+import com.wesoft.movedgridwithdb4o.CategoryManager;
 import com.wesoft.movedgridwithdb4o.R;
 import com.wesoft.movedgridwithdb4o.adapter.DragAdapter;
 import com.wesoft.movedgridwithdb4o.adapter.OtherAdapter;
-import com.wesoft.movedgridwithdb4o.dao.CategoryItem;
 
 import java.util.ArrayList;
 
@@ -126,8 +125,8 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	private void initData() {
 		long a=SystemClock.currentThreadTimeMillis();
 	
-		userChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getUserChannel());
-		otherChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getOtherChannel());
+		userChannelList = ((ArrayList<CategoryItem>) CategoryManager.getManage(mContext).getUserChannel());
+		otherChannelList = ((ArrayList<CategoryItem>) CategoryManager.getManage(mContext).getOtherChannel());
 		
 		long b=SystemClock.currentThreadTimeMillis();
 		Log.e("zz", "get userChannelList and otherChannelList Time :"+String.valueOf(b-a));
@@ -310,9 +309,9 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	/** 退出时候保存选择后数据库的设置 */
 	private void saveChannel() {
 		long a=SystemClock.currentThreadTimeMillis();
-		CategoryManage.getManage(mContext).deleteAllChannel();
-		CategoryManage.getManage(mContext).saveOtherChannel(otherAdapter.getChannnelLst());
-		CategoryManage.getManage(mContext).saveUserChannel(userAdapter.getChannnelLst());
+		CategoryManager.getManage(mContext).deleteAllChannel();
+		CategoryManager.getManage(mContext).saveOtherChannel(otherAdapter.getChannnelLst());
+		CategoryManager.getManage(mContext).saveUserChannel(userAdapter.getChannnelLst());
 		
 		long b=SystemClock.currentThreadTimeMillis();
 		Log.e("zz", "save chanel time:"+String.valueOf(b-a));

@@ -16,9 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wesoft.movedgridwithdb4o.CategoryManage;
+import com.wesoft.movedgridwithdb4o.CategoryManager;
 import com.wesoft.movedgridwithdb4o.R;
-import com.wesoft.movedgridwithdb4o.dao.CategoryItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +91,7 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 	}
 
 	private void initData() {
-		userCategoryist = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getUserChannel());
+		userCategoryist = ((ArrayList<CategoryItem>) CategoryManager.getManage(mContext).getUserChannel());
 		Log.d("yy", "initData: " + userCategoryist.size());
 		int pageCount = (userCategoryist.size() + GRIDVIEW_COUNT - 1) / GRIDVIEW_COUNT;
 		Log.d(TAG, "pageCount: " + pageCount);

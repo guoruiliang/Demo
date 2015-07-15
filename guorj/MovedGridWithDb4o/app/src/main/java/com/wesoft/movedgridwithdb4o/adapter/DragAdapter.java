@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wesoft.movedgridwithdb4o.R;
-import com.wesoft.movedgridwithdb4o.dao.CategoryItem;
+import com.wesoft.movedgridwithdb4o.view.CategoryItem;
 
 import java.util.List;
 
