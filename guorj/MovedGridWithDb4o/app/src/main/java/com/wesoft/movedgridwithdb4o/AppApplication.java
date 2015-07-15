@@ -9,7 +9,7 @@ import com.wesoft.movedgridwithdb4o.util.Db4oHelper;
 import com.wesoft.movedgridwithdb4o.util.SQLHelper;
 
 public class AppApplication extends Application {
-	public static final String LOG_TAG="DB4o";
+	public static final String LOG_TAG="william";
 	private static AppApplication mAppApplication;
 	public static Db4oHelper mDb4oHelper;
 	public static SQLHelper mSQLHelper;

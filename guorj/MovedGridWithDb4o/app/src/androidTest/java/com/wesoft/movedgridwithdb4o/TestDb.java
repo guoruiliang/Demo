@@ -1,7 +1,6 @@
 package com.wesoft.movedgridwithdb4o;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import com.wesoft.movedgridwithdb4o.util.Db4oHelper;
 import com.wesoft.movedgridwithdb4o.view.CategoryItem;
@@ -36,10 +35,10 @@ public class TestDb  extends AndroidTestCase{
             }
         });
 
-        AppApplication.printUsetTime("测试查询100次数据 ",new Runnable(){
+        AppApplication.printUsetTime("测试查询1000次数据 ",new Runnable(){
             @Override
             public void run() {
-                for(int i=0;i<100;i++){
+                for(int i=0;i<1000;i++){
                     HashMap map = new HashMap();
                     map.put("selected", 1);
                     AppApplication.mDb4oHelper.getDatasByParam(CategoryItem.class, map);

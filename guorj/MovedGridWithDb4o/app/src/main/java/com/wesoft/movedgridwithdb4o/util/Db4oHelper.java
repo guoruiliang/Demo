@@ -1,7 +1,6 @@
 package com.wesoft.movedgridwithdb4o.util;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 import com.db4o.Db4o;
@@ -56,12 +55,12 @@ public class Db4oHelper {
 	}
 	
 	private String db4oDBFullPath(Context ctx) {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-		return Environment.getExternalStorageDirectory() + "/" + DB_NAME;
-        }
-        else{
+//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+//		return Environment.getExternalStorageDirectory() + "/" + DB_NAME;
+//        }
+//        else{
         	return ctx.getDir("data", 0) + "/" + DB_NAME;
-        }
+//        }
 	}
 
 	
