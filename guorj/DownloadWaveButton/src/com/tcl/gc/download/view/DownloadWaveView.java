@@ -45,23 +45,25 @@ public class DownloadWaveView extends FrameLayout {
 	}
 	/**设置百分比*/
 	public void setPercent(float percent) {
-		mFlag = Status.RUNNING;
 		mPercent = percent;
 		postInvalidate();
 	}
 	
 	public void resumeWave(){
 		mFlag=Status.RUNNING;
+		postInvalidate();
 	}
 	
 	/**暂停*/
 	public void pauseWave() {
 		mFlag = Status.PAUSE;
+		postInvalidate();
 	}
 
 	/**移除状态*/
 	public void stopWave(){
 		mFlag=Status.NONE;
+		postInvalidate();
 	}
 	
 	public void clear() {
@@ -91,6 +93,7 @@ public class DownloadWaveView extends FrameLayout {
 		super.dispatchDraw(canvas);
 		int width = getWidth();
 		int height = getHeight();
+	
 
 		// 裁剪成圆区域
 		Path path = new Path();

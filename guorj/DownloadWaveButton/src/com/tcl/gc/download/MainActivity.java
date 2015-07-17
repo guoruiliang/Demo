@@ -18,7 +18,7 @@ import android.widget.Toast;
  */
 public class MainActivity extends Activity implements OnClickListener {
 CustomProgressWithStatus mCustomProgress;
-int percent;
+int percent=20;
 Context mContext;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,20 +85,20 @@ Context mContext;
 			mCustomProgress.setStatus(CustomDownloadStatus.WAITING);
 			break;
 		case R.id.pause:
-			mCustomProgress.setStatus(CustomDownloadStatus.PAUSE);
+			mCustomProgress.setStatus(CustomDownloadStatus.PAUSE,percent);
 			break;
 		case R.id.update:
 			mCustomProgress.setStatus(CustomDownloadStatus.UPDATE);
 			break;
 		case R.id.downloading:
-			mCustomProgress.setStatus(CustomDownloadStatus.DOWNLOADING);
+			mCustomProgress.setStatus(CustomDownloadStatus.DOWNLOADING,percent);
 			break;
 		case R.id.check:
 			mCustomProgress.setStatus(CustomDownloadStatus.CHECK);
 			break;
 		case R.id.progress:
 			percent=new Random().nextInt(100);
-			mCustomProgress.setMainProgress(percent);
+			mCustomProgress.setStatus(CustomDownloadStatus.DOWNLOADING, percent);
 			break;
 		case R.id.progressAuto:
 			startPercentTest();
@@ -142,7 +142,7 @@ Context mContext;
 			
 			@Override
 			public void run() {
-				 mCustomProgress.setMainProgress(percent);
+				 mCustomProgress.setStatus(CustomDownloadStatus.DOWNLOADING, percent);
 			}
 		});
 	}

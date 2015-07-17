@@ -82,7 +82,7 @@ public class CustomProgress extends RelativeLayout {
 	}
 
 	/** 设置主进度值 */
-	public synchronized void setMainProgress(int progress) {
+	protected synchronized void setMainProgress(int progress) {
 		mDownloadWaveView.setPercent(progress / 100f);
 	}
 

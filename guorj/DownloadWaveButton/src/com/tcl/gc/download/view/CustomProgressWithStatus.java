@@ -25,16 +25,22 @@ public class CustomProgressWithStatus extends CustomProgress {
 	private CustomDownloadStatus mIconStatus = CustomDownloadStatus.DOWNLOAD;
 
 	/**
-	 * 设置状态
+	 * 设置状态,可选一个进度值
+	 * <P>
+	 * 主要用与初始化暂停的时候，也需要显示这个进度。
 	 * 
 	 * @param status
 	 */
-	public void setStatus(CustomDownloadStatus status) {
+	public void setStatus(CustomDownloadStatus status,int... progress) {
 		this.mIconStatus = status;
 		// 通用的状态设置
 		setImage(status.mImageSrcId);
 		setText(mContext.getString(status.mNameId));
 		endDownload();
+		if(progress!=null&&progress.length==1){
+			setMainProgress(progress[0]);
+		}
+		
 		// 单独设置各种状态
 		switch (status) {
 		case PAUSE:
@@ -49,17 +55,7 @@ public class CustomProgressWithStatus extends CustomProgress {
 
 	}
 
-	/**
-	 * 设置进度，同时也是设置了当前状态为下载中
-	 * <P>
-	 * 需要在UI线程中执行
-	 */
-	@Override
-	public synchronized void setMainProgress(int progress) {
-		// TODO Auto-generated method stub
-		super.setMainProgress(progress);
-		setStatus(CustomDownloadStatus.DOWNLOADING);
-	}
+	
 
 	/** 返回当前状态 */
 	public CustomDownloadStatus getIconStatus() {
