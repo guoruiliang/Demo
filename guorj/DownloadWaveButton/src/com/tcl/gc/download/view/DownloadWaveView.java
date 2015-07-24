@@ -12,6 +12,7 @@ import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.Region.Op;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -41,6 +42,7 @@ public class DownloadWaveView extends FrameLayout {
 
 	public DownloadWaveView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
 	}
 	/**设置百分比*/
