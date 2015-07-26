@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import android.content.Context;
-import android.os.Environment;
-import android.util.Log;
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.config.Configuration;
 import com.db4o.query.Query;
+
+import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 
 public class Db4oHelper {
 
@@ -252,6 +252,64 @@ public class Db4oHelper {
 		public void done(Object obj);
 	}
 	
+	
+	/********
+	 * 新成立一个类，专门用于保存apk处于暂停状态的情况，一般暂停大概需要几秒，然后就会被设置成暂停完毕，为了防止意外，比如没改变回来，导致无法继续，
+	 * 需要程序启动的时候清空一下。
+	 *********/
+
+	public  static class PausingApk {
+
+		public String packageName;
+		public Boolean isPausing;
+
+		PausingApk(String packageName, Boolean isPausing) {
+			this.packageName = packageName;
+			this.isPausing = isPausing;
+		}
+
+		@Override
+		public String toString() {
+			return "PausingApk [packageName=" + packageName + ", isPausing=" + isPausing + "]";
+		}
+		
+		
+	}
+
+	/**
+	 * 保存apk暂状态
+	 * 
+	 * @param packageName
+	 * @param isPausing
+	 */
+	public void saveApkPausingStatus(String packageName, Boolean isPausing) {
+		HashMap<String, Object> param = new HashMap<String, Object>();
+		param.put("packageName", packageName);
+		delByParam(PausingApk.class, param);
+		save(new PausingApk(packageName, isPausing));
+	}
+
+	/**
+	 * 获取指定包名apk是否处于暂停
+	 * @param packageName
+	 * @return
+	 */
+	public Boolean getIsPausing(String packageName) {
+		HashMap<String, Object> param = new HashMap<String, Object>();
+		param.put("packageName", packageName);
+		List<PausingApk> results = getDatasByParam(PausingApk.class, param);
+		if (!results.isEmpty()) {
+			return results.get(0).isPausing;
+		}
+		return false;
+	}
+	
+	/**
+	 * 清空所有暂停状态
+	 */
+	public void clearApkPausingStatus() {
+		delAll(PausingApk.class);
+	}
 	
 	
 
