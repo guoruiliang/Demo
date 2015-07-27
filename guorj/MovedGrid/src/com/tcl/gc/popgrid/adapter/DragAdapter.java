@@ -37,7 +37,7 @@ public class DragAdapter extends BaseAdapter {
 	public int remove_position = -1;
 
 	private ImageView image_delete;
-	private boolean isShowDelete=false;// 根据这个判断是否显示删除图标
+	private boolean isShowDelete=true;// 根据这个判断是否显示删除图标
 
 	public DragAdapter(Context context, List<CategoryItem> channelList) {
 		this.context = context;

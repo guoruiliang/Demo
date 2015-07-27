@@ -3,13 +3,12 @@
     android:id="@+id/root_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#ffefefef" >
+    android:background="#ffffff" >
 
     <LinearLayout
         android:id="@+id/subscribe_main_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#fff5f5f5"
         android:orientation="vertical"
         android:paddingBottom="14.0dip" >
 
@@ -47,7 +46,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="16dp"
                 android:gravity="center"
-                android:text="收起 "
+                android:text="完成 "
                 android:textSize="16dp" />
         </LinearLayout>
 

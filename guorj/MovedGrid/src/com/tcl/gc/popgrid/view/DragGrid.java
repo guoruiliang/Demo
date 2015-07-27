@@ -204,8 +204,7 @@ public class DragGrid extends GridView {
 				dragPosition = position;
 				ViewGroup dragViewGroup = (ViewGroup) getChildAt(dragPosition - getFirstVisiblePosition());
 				TextView dragTextView = (TextView)dragViewGroup.findViewById(R.id.text_item);
-				//长按触发事件
-				
+				//长按显示删除按钮
 				if(longClickRunnable!=null){
 					longClickRunnable.run();
 				}
