@@ -275,7 +275,7 @@ public class DragGrid extends GridView {
 	}
 
 	/** 停止拖动 ，释放并初始化 */
-	private void stopDrag() {
+	public void stopDrag() {
 		if (dragImageView != null) {
 			windowManager.removeView(dragImageView);
 			dragImageView = null;

@@ -103,6 +103,8 @@ public class CategoryPopWindow extends PopupWindow implements
 				if (dismissRunnable != null) {
 					dismissRunnable.run();
 				}
+				
+				userGridView.stopDrag();
 				backgroundAlpha(1);
 			}
 		});
