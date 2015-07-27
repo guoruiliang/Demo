@@ -185,7 +185,6 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 				convertView = mInflater.inflate(R.layout.cate_item, null);
 				holder = new ViewHolder();
 				holder.name = (TextView) convertView.findViewById(R.id.text_item);
-				holder.icon = (ImageView) convertView.findViewById(R.id.icon_new);
 				holder.layout = (RelativeLayout) convertView.findViewById(R.id.rl_subscribe);
 				convertView.setTag(holder);
 			}
@@ -199,7 +198,7 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 
 	static class ViewHolder {
 		RelativeLayout layout;
-		ImageView icon;
+		ImageView delete;
 		TextView name;
 	}
 

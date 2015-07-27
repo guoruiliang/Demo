@@ -3,16 +3,16 @@
 
 
 
-    <color name="category_item_drag_stroke">#ffd2d2d2</color>
-    <color name="category_item_drag_bg">#fff5f5f5</color>
-    <color name="category_item_selected_bg">#ffffffff</color>
-    <color name="category_item_selected_stroke">#ffcc3131</color>
-    <color name="category_item_disabled_stroke">#ffd9d9d9</color>
-    <color name="category_item_disabled_bg">#ffefefef</color>
-    <color name="category_item_pressed_stroke">#ffcdcdcd</color>
-    <color name="category_item_pressed_bg">#fff9f9f9</color>
-    <color name="category_item_normal_stroke">#ffcdcdcd</color>
-    <color name="category_item_normal_bg">#fff5f5f5</color>
+    <color name="category_item_drag_stroke">#ffe5e5e5</color>
+    <color name="category_item_drag_bg">#ffe5e5e5</color>
+    <color name="category_item_selected_bg">#ffe5e5e5</color>
+    <color name="category_item_selected_stroke">#ffe5e5e5</color>
+    <color name="category_item_disabled_stroke">#ffe5e5e5</color>
+    <color name="category_item_disabled_bg">#ffe5e5e5</color>
+    <color name="category_item_pressed_stroke">#ffe5e5e5</color>
+    <color name="category_item_pressed_bg">#ffe5e5e5</color>
+    <color name="category_item_normal_stroke">#ffe5e5e5</color>
+    <color name="category_item_normal_bg">#ffe5e5e5</color>
 
 
 

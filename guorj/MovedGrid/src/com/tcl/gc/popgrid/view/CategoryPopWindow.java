@@ -50,6 +50,9 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	ArrayList<CategoryItem> userChannelList = new ArrayList<CategoryItem>();
 	/** 是否在移动，由于这边是动画结束后才进行的数据更替，设置这个限制为了避免操作太频繁造成的数据错乱。 */
 	boolean isMove = false;
+	
+	TextView text_done;//完成按钮
+	/**popwindows边界距离*/
 	int margin;
 	private Runnable dismissRunnable;
 
@@ -63,7 +66,7 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 		 margin=DensityUtil.dip2px(context, 8);//获取边界值
 		
 		int h = mActivity.getWindowManager().getDefaultDisplay().getHeight();
-		int w = mActivity.getWindowManager().getDefaultDisplay().getWidth();
+		int w = mActivity.getWindowManager().getDefaultDisplay().getWidth()-2*margin;
 		// 设置SelectPicPopupWindow的View
 		this.setContentView(conentView);
 		// 设置SelectPicPopupWindow弹出窗体的宽
@@ -81,6 +84,8 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 		this.setBackgroundDrawable(dw);
 		// 设置SelectPicPopupWindow弹出窗体动画效果
 		this.setAnimationStyle(R.style.AnimationForCate);
+		
+		text_done=(TextView)conentView.findViewById(R.id.text_done);
 
 		userGridView = (DragGrid) conentView.findViewById(R.id.userGridView);
 		otherGridView = (OtherGridView) conentView.findViewById(R.id.otherGridView);
@@ -97,11 +102,30 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 			}
 		});
 
-		conentView.findViewById(R.id.text_done).setOnClickListener(new OnClickListener() {
+		userGridView.setLongClickRunnable(new Runnable(){
+
+			@Override
+			public void run() {
+				text_done.setText("完成");//设置编辑文字显示
+				userAdapter.setIsShowDelete(true);
+				userAdapter.notifyDataSetChanged();
+			}
+			
+		});
+		text_done.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				dismiss();
+				//如果处于删除按钮显示状态
+				if(userAdapter.getIsShowDelete()){
+					userAdapter.setIsShowDelete(false);
+					userAdapter.notifyDataSetChanged();
+					text_done.setText("收起");
+				}else{
+					
+					dismiss();
+				}
+				
 
 			}
 		});
@@ -149,29 +173,34 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 		}
 		switch (parent.getId()) {
 		case R.id.userGridView:
-			final ImageView moveImageView = getView(view);
-			if (moveImageView != null) {
-				TextView newTextView = (TextView) view.findViewById(R.id.text_item);
-				final int[] startLocation = new int[2];
-				newTextView.getLocationInWindow(startLocation);
-				final CategoryItem channel = ((DragAdapter) parent.getAdapter()).getItem(position);// 获取点击的频道内容
-				otherAdapter.setVisible(false);
-				// 添加到最后一个
-				otherAdapter.addItem(channel);
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						try {
-							int[] endLocation = new int[2];
-							// 获取终点的坐标
-							otherGridView.getChildAt(otherGridView.getLastVisiblePosition()).getLocationInWindow(
-									endLocation);
-							MoveAnim(moveImageView, startLocation, endLocation, channel, userGridView);
-							userAdapter.setRemove(position);
-						} catch (Exception localException) {
+			//只有当有删除按钮显示时候，点击才有效
+			if(userAdapter.getIsShowDelete()){
+				final ImageView moveImageView = getView(view);
+				if (moveImageView != null) {
+					TextView newTextView = (TextView) view.findViewById(R.id.text_item);
+					final int[] startLocation = new int[2];
+					newTextView.getLocationInWindow(startLocation);
+					final CategoryItem channel = ((DragAdapter) parent.getAdapter()).getItem(position);// 获取点击的频道内容
+					otherAdapter.setVisible(false);
+					// 添加到最后一个
+					otherAdapter.addItem(channel);
+					new Handler().postDelayed(new Runnable() {
+						public void run() {
+							try {
+								int[] endLocation = new int[2];
+								// 获取终点的坐标
+								otherGridView.getChildAt(otherGridView.getLastVisiblePosition()).getLocationInWindow(
+										endLocation);
+								MoveAnim(moveImageView, startLocation, endLocation, channel, userGridView);
+								userAdapter.setRemove(position);
+							} catch (Exception localException) {
+							}
 						}
-					}
-				}, 50L);
+					}, 50L);
+				}
 			}
+			
+		
 			break;
 		case R.id.otherGridView:
 			final ImageView moveImageView2 = getView(view);

@@ -84,6 +84,12 @@ public class DragGrid extends GridView {
 	/* 移动时候最后个动画的ID */
 	private String LastAnimationID;
 	
+	//长按触发回调
+	Runnable longClickRunnable;
+	public void setLongClickRunnable(Runnable runnable){
+		this.longClickRunnable=runnable;
+	}
+	
 	public DragGrid(Context context) {
 		super(context);
 		init(context);
@@ -198,6 +204,13 @@ public class DragGrid extends GridView {
 				dragPosition = position;
 				ViewGroup dragViewGroup = (ViewGroup) getChildAt(dragPosition - getFirstVisiblePosition());
 				TextView dragTextView = (TextView)dragViewGroup.findViewById(R.id.text_item);
+				//长按触发事件
+				
+				if(longClickRunnable!=null){
+					longClickRunnable.run();
+				}
+				
+				
 				dragTextView.setSelected(true);
 				dragTextView.setEnabled(false);
 				itemHeight = dragViewGroup.getHeight();
