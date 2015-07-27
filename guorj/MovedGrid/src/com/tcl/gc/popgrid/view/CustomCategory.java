@@ -29,7 +29,8 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 	CategoryPopWindow mPopupWindow;
 	private OnCateItemClickListener mCateItemClickListener;;
 	
-
+	public static int textBg_Select=0xffB2DEFE;
+	public static int textBg_notSelect=0xffe5e5e5;
 	/**
 	 * 设置点击时间监听
 	 * 
@@ -194,9 +195,9 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 			
 			//这里设置选中状态
 			if(channel.getId()==getCurrentItemId()){
-				holder.name.setBackgroundColor(0xffB2DEFE);
+				holder.name.setBackgroundColor(textBg_Select);
 			}else{
-				holder.name.setBackgroundColor(0xffe5e5e5);
+				holder.name.setBackgroundColor(textBg_notSelect);
 			}
 			
 			return convertView;
@@ -220,6 +221,7 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 				mCateItemClickListener.onItemClick(item);
 			}
 			setCurrentItemId(item.getId());
+			initData();
 			break;
 
 		default:
@@ -232,13 +234,13 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 	}
 	
 	/**设置当前选择*/
-	public void setCurrentItemId(int id){
+	public static    void setCurrentItemId(int id){
 		AppApplication.mDb4oHelper.put("currentItemId", id);
-		initData();
+		
 	}
 	
 	/**获取当前选中分类的ID*/
-	public int  getCurrentItemId(){
+	public static int  getCurrentItemId(){
 		if(AppApplication.mDb4oHelper.get("currentItemId")!=null){
 			return (Integer)AppApplication.mDb4oHelper.get("currentItemId");
 		}

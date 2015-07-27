@@ -11,8 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tcl.gc.popgrid.AppApplication;
 import com.tcl.gc.popgrid.R;
 import com.tcl.gc.popgrid.dao.CategoryItem;
+import com.tcl.gc.popgrid.view.CustomCategory;
 
 public class DragAdapter extends BaseAdapter {
 	/** TAG */
@@ -30,14 +32,12 @@ public class DragAdapter extends BaseAdapter {
 	public List<CategoryItem> channelList;
 	/** TextView 分类内容 */
 	private TextView item_text;
-	
-	
-	
+
 	/** 要删除的position */
 	public int remove_position = -1;
 
 	private ImageView image_delete;
-	private boolean isShowDelete=true;// 根据这个判断是否显示删除图标
+	private boolean isShowDelete = true;// 根据这个判断是否显示删除图标
 
 	public DragAdapter(Context context, List<CategoryItem> channelList) {
 		this.context = context;
@@ -50,14 +50,14 @@ public class DragAdapter extends BaseAdapter {
 		return channelList == null ? 0 : channelList.size();
 	}
 
-	public void setIsShowDelete(boolean isShowDelete){
-		this.isShowDelete=isShowDelete;
+	public void setIsShowDelete(boolean isShowDelete) {
+		this.isShowDelete = isShowDelete;
 	}
 
-	public boolean getIsShowDelete(){
+	public boolean getIsShowDelete() {
 		return this.isShowDelete;
 	}
-	
+
 	@Override
 	public CategoryItem getItem(int position) {
 		// TODO Auto-generated method stub
@@ -73,17 +73,25 @@ public class DragAdapter extends BaseAdapter {
 		return position;
 	}
 
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = LayoutInflater.from(context).inflate(R.layout.cate_item,
 				null);
 		item_text = (TextView) view.findViewById(R.id.text_item);
-		image_delete=(ImageView)view.findViewById(R.id.image_delete);
-		
-		image_delete.setVisibility(isShowDelete?View.VISIBLE:View.GONE);
-		
+		image_delete = (ImageView) view.findViewById(R.id.image_delete);
+
+		image_delete.setVisibility(isShowDelete ? View.VISIBLE : View.GONE);
+
 		CategoryItem channel = getItem(position);
 		item_text.setText(channel.getName());
+		//当前选中
+			if(channel.getId()==CustomCategory.getCurrentItemId()){
+				item_text.setBackgroundColor(CustomCategory.textBg_Select);
+			}else{
+				item_text.setBackgroundColor(CustomCategory.textBg_notSelect);
+			}
+
 		// if ((position == 0) || (position == 1)){
 		// //
 		// item_text.setTextColor(context.getResources().getColor(R.color.black));

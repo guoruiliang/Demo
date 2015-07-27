@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CategoryPopWindow extends PopupWindow implements
 		OnItemClickListener {
@@ -180,8 +181,10 @@ public class CategoryPopWindow extends PopupWindow implements
 		}
 		switch (parent.getId()) {
 		case R.id.userGridView:
-			// 只有当有删除按钮显示时候，点击caiyouxiao
-			if (userAdapter.getIsShowDelete()) {
+			
+			if(userChannelList.get(position).getId()==CustomCategory.getCurrentItemId()){
+//				Toast.makeText(mContext, "当前行不能删除", Toast.LENGTH_SHORT).show();
+			}else if (userAdapter.getIsShowDelete()) {
 				final ImageView moveImageView = getView(view);
 				if (moveImageView != null) {
 					TextView newTextView = (TextView) view
