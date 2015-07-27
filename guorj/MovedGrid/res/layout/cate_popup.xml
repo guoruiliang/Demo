@@ -33,21 +33,21 @@
             <TextView
                 android:id="@+id/my_category_tip_text"
                 android:layout_width="0dp"
-                
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_weight="1"
                 android:text="单击增删分类，长按拖拽排序"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/text_done"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="8dp"
-                android:text=" 完成"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:text="完成 "
                 android:textSize="16dp" />
         </LinearLayout>
 
@@ -58,7 +58,6 @@
             android:layout_marginBottom="14dp"
             android:layout_marginTop="14dp"
             android:background="#ffcdcdcd" />
-
         <com.tcl.gc.popgrid.view.DragGrid
             android:id="@+id/userGridView"
             android:layout_width="fill_parent"
@@ -109,3 +108,5 @@
     </LinearLayout>
 
 </RelativeLayout>
+
+

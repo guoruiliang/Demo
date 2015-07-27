@@ -2,6 +2,12 @@ package com.tcl.gc.popgrid.view;
 
 import java.util.ArrayList;
 
+import com.tcl.gc.popgrid.CategoryManage;
+import com.tcl.gc.popgrid.R;
+import com.tcl.gc.popgrid.adapter.DragAdapter;
+import com.tcl.gc.popgrid.adapter.OtherAdapter;
+import com.tcl.gc.popgrid.dao.CategoryItem;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,12 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
-import com.tcl.gc.popgrid.CategoryManage;
-import com.tcl.gc.popgrid.R;
-import com.tcl.gc.popgrid.adapter.DragAdapter;
-import com.tcl.gc.popgrid.adapter.OtherAdapter;
-import com.tcl.gc.popgrid.dao.CategoryItem;
 
 public class CategoryPopWindow extends PopupWindow implements OnItemClickListener {
 	private Context mContext;
@@ -60,8 +60,9 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 		this.dismissRunnable = runnable;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		conentView = inflater.inflate(R.layout.cate_popup, null);
+
 		int h = mActivity.getWindowManager().getDefaultDisplay().getHeight();
-		int w = mActivity.getWindowManager().getDefaultDisplay().getWidth();
+		int w = mActivity.getWindowManager().getDefaultDisplay().getWidth() -100;
 		// 设置SelectPicPopupWindow的View
 		this.setContentView(conentView);
 		// 设置SelectPicPopupWindow弹出窗体的宽
@@ -114,7 +115,7 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	public void showPopupWindow(View parent) {
 		if (!this.isShowing()) {
 			// 以下拉方式显示popupwindow
-			this.showAsDropDown(parent, 0, -128);
+			this.showAsDropDown(parent, 50, -128);
 			backgroundAlpha(0.5f);
 		} else {
 			this.dismiss();
@@ -124,14 +125,14 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 
 	/** 初始化数据 */
 	private void initData() {
-		long a=SystemClock.currentThreadTimeMillis();
-	
+		long a = SystemClock.currentThreadTimeMillis();
+
 		userChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getUserChannel());
 		otherChannelList = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getOtherChannel());
-		
-		long b=SystemClock.currentThreadTimeMillis();
-		Log.e("zz", "get userChannelList and otherChannelList Time :"+String.valueOf(b-a));
-		
+
+		long b = SystemClock.currentThreadTimeMillis();
+		Log.e("zz", "get userChannelList and otherChannelList Time :" + String.valueOf(b - a));
+
 		userAdapter = new DragAdapter(mContext, userChannelList);
 		userGridView.setAdapter(userAdapter);
 		otherAdapter = new OtherAdapter(mContext, otherChannelList);
@@ -164,8 +165,8 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 						try {
 							int[] endLocation = new int[2];
 							// 获取终点的坐标
-							otherGridView.getChildAt(otherGridView.getLastVisiblePosition()).getLocationInWindow(
-									endLocation);
+							otherGridView.getChildAt(otherGridView.getLastVisiblePosition())
+									.getLocationInWindow(endLocation);
 							MoveAnim(moveImageView, startLocation, endLocation, channel, userGridView);
 							userAdapter.setRemove(position);
 						} catch (Exception localException) {
@@ -189,8 +190,8 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 						try {
 							int[] endLocation = new int[2];
 							// 获取终点的坐标
-							userGridView.getChildAt(userGridView.getLastVisiblePosition()).getLocationInWindow(
-									endLocation);
+							userGridView.getChildAt(userGridView.getLastVisiblePosition())
+									.getLocationInWindow(endLocation);
 							MoveAnim(moveImageView2, startLocation, endLocation, channel, otherGridView);
 							otherAdapter.setRemove(position);
 						} catch (Exception localException) {
@@ -285,8 +286,8 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 	private ViewGroup getMoveViewGroup() {
 		ViewGroup moveViewGroup = (ViewGroup) mActivity.getWindow().getDecorView();
 		LinearLayout moveLinearLayout = new LinearLayout(mContext);
-		moveLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		moveLinearLayout
+				.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		moveViewGroup.addView(moveLinearLayout);
 		return moveLinearLayout;
 	}
@@ -309,13 +310,13 @@ public class CategoryPopWindow extends PopupWindow implements OnItemClickListene
 
 	/** 退出时候保存选择后数据库的设置 */
 	private void saveChannel() {
-		long a=SystemClock.currentThreadTimeMillis();
+		long a = SystemClock.currentThreadTimeMillis();
 		CategoryManage.getManage(mContext).deleteAllChannel();
 		CategoryManage.getManage(mContext).saveOtherChannel(otherAdapter.getChannnelLst());
 		CategoryManage.getManage(mContext).saveUserChannel(userAdapter.getChannnelLst());
-		
-		long b=SystemClock.currentThreadTimeMillis();
-		Log.e("zz", "save chanel time:"+String.valueOf(b-a));
+
+		long b = SystemClock.currentThreadTimeMillis();
+		Log.e("zz", "save chanel time:" + String.valueOf(b - a));
 	}
 
 	/**

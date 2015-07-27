@@ -26,16 +26,6 @@ public class TestActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.test);
 
-//		mCustomCategory = (CustomCategory) findViewById(R.id.customCategory);
-//		mCustomCategory.setOnCateItemClickListener(new OnCateItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(CategoryItem cateGrovyItem) {
-//				Toast.makeText(MainActivity.this, "CateItem: " + cateGrovyItem, Toast.LENGTH_SHORT).show();
-//
-//			}
-//		});
-
 	}
 
 	@Override
