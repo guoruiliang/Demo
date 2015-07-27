@@ -23,7 +23,7 @@ public class Db4oHelper {
 
 	private static ObjectContainer oc;
 
-	public static final String DB_NAME="db4oTOp.data";
+	public static final String DB_NAME="db4oDemo.data";
 	
 	private static ExecutorService execService = Executors
 			.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
@@ -251,6 +251,8 @@ public class Db4oHelper {
 	public static interface Callback {
 		public void done(Object obj);
 	}
+	
+	
 	
 	
 	/********

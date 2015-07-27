@@ -10,21 +10,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="14.0dip" >
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
             android:layout_marginTop="14.0dip"
-            android:gravity="bottom"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/my_category_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12.0dip"
+                android:layout_marginLeft="16.0dip"
                 android:text="我的分类"
                 android:textColor="#000000"
                 android:textSize="16dp" />
@@ -47,16 +46,10 @@
                 android:layout_marginRight="16dp"
                 android:gravity="center"
                 android:text="完成 "
+                android:textColor="#008FFD"
                 android:textSize="16dp" />
         </LinearLayout>
 
-        <View
-            android:id="@+id/seperate_line"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="14dp"
-            android:layout_marginTop="14dp"
-            android:background="#ffcdcdcd" />
         <com.tcl.gc.popgrid.view.DragGrid
             android:id="@+id/userGridView"
             android:layout_width="fill_parent"
@@ -83,18 +76,18 @@
             android:id="@+id/more_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14.0dip"
-            android:layout_marginLeft="10.0dip"
+            android:layout_marginBottom="10.0dip"
+           android:layout_marginLeft="16.0dip"
             android:text="点击选择分类"
             android:textColor="#000000"
-            android:textSize="13dp" />
+            android:textSize="16dp" />
         <!-- 需要增加的分类，其中通过layout_marginBottom大小可以控制弹框大小 -->
 
         <com.tcl.gc.popgrid.view.OtherGridView
             android:id="@+id/otherGridView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="14dp"
             android:layout_marginLeft="14dip"
             android:layout_marginRight="14dip"
             android:gravity="center"

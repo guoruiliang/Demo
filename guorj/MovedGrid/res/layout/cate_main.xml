@@ -24,6 +24,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
             android:text="编辑最爱"
+            android:textColor="#008FFD"
             android:textSize="16dp" />
     </LinearLayout>
 

@@ -28,6 +28,7 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 	TextView txtView;
 	CategoryPopWindow mPopupWindow;
 	private OnCateItemClickListener mCateItemClickListener;;
+	
 
 	/**
 	 * 设置点击时间监听
@@ -94,7 +95,6 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 
 	private void initData() {
 		userCategoryist = ((ArrayList<CategoryItem>) CategoryManage.getManage(mContext).getUserChannel());
-		Log.d("yy", "initData: " + userCategoryist.size());
 		int pageCount = (userCategoryist.size() + GRIDVIEW_COUNT - 1) / GRIDVIEW_COUNT;
 		Log.d(TAG, "pageCount: " + pageCount);
 		mGridViewAdapters.clear();
@@ -154,7 +154,6 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 		@Override
 		public int getCount() {
 			int size = (userCategoryist == null ? 0 : userCategoryist.size() - GRIDVIEW_COUNT * pagePosition);
-			Log.d(TAG, "size: " + size);
 			if (size > GRIDVIEW_COUNT) {
 				return GRIDVIEW_COUNT;
 			} else {
@@ -192,6 +191,14 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 			holder.layout.setOnClickListener(CustomCategory.this);
 			CategoryItem channel = getItem(nowPosition);
 			holder.name.setText(channel.getName());
+			
+			//这里设置选中状态
+			if(channel.getId()==getCurrentItemId()){
+				holder.name.setBackgroundColor(0xffB2DEFE);
+			}else{
+				holder.name.setBackgroundColor(0xffe5e5e5);
+			}
+			
 			return convertView;
 		}
 	}
@@ -208,10 +215,11 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 		case R.id.rl_subscribe:
 			int id = (Integer) v.getTag();
 			CategoryItem item = userCategoryist.get(id);
-
+			
 			if (mCateItemClickListener != null && item != null) {
 				mCateItemClickListener.onItemClick(item);
 			}
+			setCurrentItemId(item.getId());
 			break;
 
 		default:
@@ -222,5 +230,18 @@ public class CustomCategory extends LinearLayout implements OnClickListener {
 	public interface OnCateItemClickListener {
 		void onItemClick(CategoryItem cateGrovyItem);
 	}
-
+	
+	/**设置当前选择*/
+	public void setCurrentItemId(int id){
+		AppApplication.mDb4oHelper.put("currentItemId", id);
+		initData();
+	}
+	
+	/**获取当前选中分类的ID*/
+	public int  getCurrentItemId(){
+		if(AppApplication.mDb4oHelper.get("currentItemId")!=null){
+			return (Integer)AppApplication.mDb4oHelper.get("currentItemId");
+		}
+		return 0;
+	}
 }
